@@ -5,25 +5,27 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { PostForm, type BreadcrumbItem } from '@/types';
+import { Post, PostForm, type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
 	{
-		title: 'Create Post',
+		title: 'Edit Post',
 		href: '/posts',
 	},
 ];
 
+const { currentPost } = defineProps<{ currentPost: Post }>();
+
 const form = useForm<PostForm>({
-	title: '',
-	content: '',
+	title: currentPost.title,
+	content: currentPost.content,
 	image: null,
 });
 
 const submit = () => {
-	form.post(route('posts.store'));
+	form.post(route('posts.update'));
 };
 
 const handleImageInput = (e: Event) => {
@@ -36,7 +38,7 @@ const handleImageInput = (e: Event) => {
 </script>
 
 <template>
-	<Head title="Create Post" />
+	<Head title="Edit Post" />
 
 	<AppLayout :breadcrumbs="breadcrumbs">
 		<div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -78,7 +80,7 @@ const handleImageInput = (e: Event) => {
 
 						<Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="form.processing">
 							<LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-							Create
+							Edit
 						</Button>
 					</div>
 				</form>

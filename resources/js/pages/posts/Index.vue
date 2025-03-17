@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
+import { Post, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
@@ -10,6 +10,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 		href: '/posts',
 	},
 ];
+
+defineProps<{ posts: Post[] }>();
 </script>
 
 <template>
@@ -24,21 +26,27 @@ const breadcrumbs: BreadcrumbItem[] = [
 			<div
 				class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
 				<Table>
-					<TableCaption>A list of your recent invoices.</TableCaption>
+					<TableCaption>A list of your recent posts.</TableCaption>
+
 					<TableHeader>
 						<TableRow>
-							<TableHead class="w-[100px]"> Invoice </TableHead>
-							<TableHead>Status</TableHead>
-							<TableHead>Method</TableHead>
-							<TableHead class="text-right"> Amount </TableHead>
+							<TableHead class="w-[100px]"> Id </TableHead>
+							<TableHead> Title </TableHead>
+							<TableHead> Image </TableHead>
+							<TableHead class="text-right"> Actions </TableHead>
 						</TableRow>
 					</TableHeader>
-					<TableBody>
+
+					<TableBody v-for="post in posts" :key="post.id">
 						<TableRow>
-							<TableCell class="font-medium"> INV001 </TableCell>
-							<TableCell>Paid</TableCell>
-							<TableCell>Credit Card</TableCell>
-							<TableCell class="text-right"> $250.00 </TableCell>
+							<TableCell class="font-medium"> {{ post.id }} </TableCell>
+							<TableCell> {{ post.title }} </TableCell>
+							<TableCell>
+								<img :src="`storage/${post.image}`" alt="" class="h-12 w-12 rounded object-cover" />
+							</TableCell>
+							<TableCell class="text-right">
+								<Link :href="route('posts.edit', post.id)" class="text-indigo-500 hover:text-indigo-600">Edit</Link>
+							</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>

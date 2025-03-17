@@ -9,6 +9,7 @@ class PostIndexController extends Controller
 {
     public function __invoke(): Response
     {
-        return Inertia::render('posts/Index');
+        $posts = auth()->user()->posts()->latest()->get();
+        return Inertia::render('posts/Index', compact('posts'));
     }
 }
