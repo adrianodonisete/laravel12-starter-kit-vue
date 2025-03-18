@@ -8,6 +8,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { PostForm, type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
 	{
@@ -22,6 +23,8 @@ const form = useForm<PostForm>({
 	image: null,
 });
 
+const imagePreview = ref<string | null>(null);
+
 const submit = () => {
 	form.post(route('posts.store'));
 };
@@ -31,6 +34,7 @@ const handleImageInput = (e: Event) => {
 	const file = target.files?.[0];
 	if (file) {
 		form.image = file;
+		imagePreview.value = URL.createObjectURL(file);
 	}
 };
 </script>
@@ -60,6 +64,7 @@ const handleImageInput = (e: Event) => {
 						<div class="grid gap-2">
 							<Label for="image">Image</Label>
 							<Input id="image" type="file" :tabindex="2" @change="handleImageInput" />
+							<img v-if="imagePreview" :src="imagePreview" alt="" class="h-12 w-12 rounded object-cover" />
 							<InputError :message="form.errors.image" />
 						</div>
 

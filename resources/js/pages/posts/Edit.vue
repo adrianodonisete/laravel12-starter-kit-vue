@@ -8,6 +8,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Post, PostForm, type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
 	{
@@ -22,10 +23,13 @@ const form = useForm<PostForm>({
 	title: currentPost.title,
 	content: currentPost.content,
 	image: null,
+	_method: 'put',
 });
 
+const imagePreview = ref<string | null>(null);
+
 const submit = () => {
-	form.post(route('posts.update'));
+	form.post(route('posts.update', currentPost.id));
 };
 
 const handleImageInput = (e: Event) => {
@@ -33,6 +37,7 @@ const handleImageInput = (e: Event) => {
 	const file = target.files?.[0];
 	if (file) {
 		form.image = file;
+		imagePreview.value = URL.createObjectURL(file);
 	}
 };
 </script>
@@ -62,6 +67,14 @@ const handleImageInput = (e: Event) => {
 						<div class="grid gap-2">
 							<Label for="image">Image</Label>
 							<Input id="image" type="file" :tabindex="2" @change="handleImageInput" />
+							<div class="flex space-x-2">
+								<img
+									v-if="currentPost.image"
+									:src="currentPost.image"
+									alt=""
+									:class="[imagePreview ? 'opacity-30' : '', 'h-12 w-12 rounded object-cover']" />
+								<img v-if="imagePreview" :src="imagePreview" alt="" class="h-12 w-12 rounded object-cover" />
+							</div>
 							<InputError :message="form.errors.image" />
 						</div>
 

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Post, type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { onMounted, watch } from 'vue';
+import { toast } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
 	{
@@ -12,6 +14,23 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 defineProps<{ posts: Post[] }>();
+
+interface Flash {
+	success?: string;
+	error?: string;
+}
+
+onMounted(() => {
+	watch(
+		() => usePage<{ flash: Flash }>().props.flash,
+		(flash: Flash) => {
+			if (flash.success) {
+				toast.success(flash.success);
+			}
+		},
+		{ immediate: true }
+	);
+});
 </script>
 
 <template>
@@ -42,7 +61,7 @@ defineProps<{ posts: Post[] }>();
 							<TableCell class="font-medium"> {{ post.id }} </TableCell>
 							<TableCell> {{ post.title }} </TableCell>
 							<TableCell>
-								<img :src="`storage/${post.image}`" alt="" class="h-12 w-12 rounded object-cover" />
+								<img :src="post.image" alt="" class="h-12 w-12 rounded object-cover" />
 							</TableCell>
 							<TableCell class="text-right">
 								<Link :href="route('posts.edit', post.id)" class="text-indigo-500 hover:text-indigo-600">Edit</Link>
