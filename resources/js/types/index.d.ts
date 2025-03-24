@@ -35,6 +35,11 @@ export interface User {
 	updated_at: string;
 }
 
+interface Flash {
+	success?: null;
+	error?: null;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;
 
 export type PostForm = {

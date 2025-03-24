@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Post, type BreadcrumbItem } from '@/types';
+import { Flash, Post, type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { onMounted, watch } from 'vue';
@@ -15,17 +15,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 defineProps<{ posts: Post[] }>();
 
-interface Flash {
-	success?: string;
-	error?: string;
-}
-
 onMounted(() => {
 	watch(
 		() => usePage<{ flash: Flash }>().props.flash,
 		(flash: Flash) => {
 			if (flash.success) {
 				toast.success(flash.success);
+				flash.success = null;
 			}
 		},
 		{ immediate: true }
@@ -63,8 +59,15 @@ onMounted(() => {
 							<TableCell>
 								<img :src="post.image" alt="" class="h-12 w-12 rounded object-cover" />
 							</TableCell>
-							<TableCell class="text-right">
+							<TableCell class="flex justify-end gap-2">
 								<Link :href="route('posts.edit', post.id)" class="text-indigo-500 hover:text-indigo-600">Edit</Link>
+								<Link
+									:href="route('posts.destroy', post.id)"
+									class="text-red-500 hover:text-red-600"
+									method="delete"
+									as="button">
+									Delete
+								</Link>
 							</TableCell>
 						</TableRow>
 					</TableBody>
