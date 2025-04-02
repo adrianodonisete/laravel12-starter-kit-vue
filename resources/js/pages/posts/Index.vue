@@ -5,6 +5,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { onMounted, watch } from 'vue';
 import { toast } from 'vue-sonner';
+import AlertConfirm from '@/components/AlertConfirm.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
 	{
@@ -75,4 +76,7 @@ onMounted(() => {
 			</div>
 		</div>
 	</AppLayout>
+
+	<!-- https://www.shadcn-vue.com/docs/components/alert-dialog.html -->
+	<AlertConfirm :defaultOpen="true" :open="true" :title="`Do you wanto to delete Post ID#12?`" />
 </template>
