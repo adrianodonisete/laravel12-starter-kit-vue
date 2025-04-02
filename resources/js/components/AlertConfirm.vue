@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watch, ref } from 'vue';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -12,29 +13,33 @@ import {
 } from '@/components/ui/alert-dialog';
 
 interface Props {
-	defaultOpen?: boolean;
-	open?: boolean;
+	open: boolean;
 	title: string;
+	description: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-	defaultOpen: true,
-	open: false,
+	description: 'This action cannot be undone.',
 });
+
+const isOpen = ref(props.open);
+
+const closeDialog = () => {
+	isOpen.value = false;
+};
 </script>
 
 <template>
-	<AlertDialog :defaultOpen="props.defaultOpen" :open="props.open">
+	<AlertDialog :open="isOpen">
 		<AlertDialogTrigger>Open</AlertDialogTrigger>
 		<AlertDialogContent>
 			<AlertDialogHeader>
 				<AlertDialogTitle>{{ props.title }}</AlertDialogTitle>
-				<AlertDialogDescription>
-					This action cannot be undone. This will permanently delete your account and remove your data from our servers.
-				</AlertDialogDescription>
+				<AlertDialogDescription>{{ props.description }}</AlertDialogDescription>
 			</AlertDialogHeader>
+
 			<AlertDialogFooter>
-				<AlertDialogCancel>Cancel</AlertDialogCancel>
+				<AlertDialogCancel @click="closeDialog">Cancel</AlertDialogCancel>
 				<AlertDialogAction>Continue</AlertDialogAction>
 			</AlertDialogFooter>
 		</AlertDialogContent>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { onMounted, ref, watch } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Flash, Post, type BreadcrumbItem } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/vue3';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { onMounted, watch } from 'vue';
-import { toast } from 'vue-sonner';
+import { Button } from '@/components/ui/button';
 import AlertConfirm from '@/components/AlertConfirm.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -15,6 +16,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 defineProps<{ posts: Post[] }>();
+
+const isAlertOpen = ref(false);
+
+const openAlert = () => {
+	isAlertOpen.value = true;
+};
 
 onMounted(() => {
 	watch(
@@ -75,8 +82,16 @@ onMounted(() => {
 				</Table>
 			</div>
 		</div>
+
+		<div>
+			<Button class="text-red-500 hover:text-red-600" @click="openAlert">Show Alert</Button>
+
+			<AlertConfirm
+				:open="isAlertOpen"
+				title="Do you want to delete the Post ID#12?"
+				description="This action cannot be undone. This will permanently delete the post." />
+		</div>
 	</AppLayout>
 
 	<!-- https://www.shadcn-vue.com/docs/components/alert-dialog.html -->
-	<AlertConfirm :defaultOpen="true" :open="true" :title="`Do you wanto to delete Post ID#12?`" />
 </template>
