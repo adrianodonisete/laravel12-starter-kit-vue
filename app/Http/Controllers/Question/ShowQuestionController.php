@@ -8,8 +8,13 @@ use Inertia\Response;
 
 class ShowQuestionController extends Controller
 {
-    public function __invoke(): Response
+    public function show(): Response
     {
         return Inertia::render('question/ShowQuestion', []);
+    }
+
+    public function alert(): Response
+    {
+        return Inertia::render('question/AlertQuestion', []);
     }
 }

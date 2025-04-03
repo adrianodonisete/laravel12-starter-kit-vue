@@ -32,9 +32,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/posts/{post}', PostDestroyController::class)
         ->name('posts.destroy');
 
-
-    Route::get('/questions/show', ShowQuestionController::class)
+    Route::get('/questions/show', [ShowQuestionController::class, 'show'])
         ->name('questions.show');
+    Route::get('/questions/alert', [ShowQuestionController::class, 'alert'])
+        ->name('questions.alert');
 });
 
 require __DIR__ . '/settings.php';
