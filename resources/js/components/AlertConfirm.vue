@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, ref } from 'vue';
+import { ref } from 'vue';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -11,6 +11,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Link } from '@inertiajs/vue3';
 
 interface Props {
 	open: boolean;
@@ -30,7 +31,7 @@ const closeDialog = () => {
 </script>
 
 <template>
-	<AlertDialog :open="isOpen">
+	<AlertDialog :defaultOpen="true" :open="isOpen">
 		<AlertDialogTrigger>Open</AlertDialogTrigger>
 		<AlertDialogContent>
 			<AlertDialogHeader>
@@ -40,7 +41,9 @@ const closeDialog = () => {
 
 			<AlertDialogFooter>
 				<AlertDialogCancel @click="closeDialog">Cancel</AlertDialogCancel>
-				<AlertDialogAction>Continue</AlertDialogAction>
+				<AlertDialogAction>
+					<Link :href="route('dashboard')" class="text-indigo-500 hover:text-indigo-600"> Go to Dashboard </Link>
+				</AlertDialogAction>
 			</AlertDialogFooter>
 		</AlertDialogContent>
 	</AlertDialog>

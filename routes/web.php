@@ -7,6 +7,7 @@ use App\Http\Controllers\PostEditController;
 use App\Http\Controllers\PostIndexController;
 use App\Http\Controllers\PostStoreController;
 use App\Http\Controllers\PostUpdateController;
+use App\Http\Controllers\Question\ShowQuestionController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -14,7 +15,8 @@ Route::get('/', function () {
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/posts', PostIndexController::class)
@@ -29,6 +31,10 @@ Route::group(['middleware' => 'auth'], function () {
         ->name('posts.update');
     Route::delete('/posts/{post}', PostDestroyController::class)
         ->name('posts.destroy');
+
+
+    Route::get('/questions/show', ShowQuestionController::class)
+        ->name('questions.show');
 });
 
 require __DIR__ . '/settings.php';
