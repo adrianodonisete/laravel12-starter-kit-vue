@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, watch } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { toast } from 'vue-sonner';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Flash, Post, type BreadcrumbItem } from '@/types';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import AlertConfirm from '@/components/AlertConfirm.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -16,12 +15,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 defineProps<{ posts: Post[] }>();
-
-const isAlertOpen = ref(false);
-
-const openAlert = () => {
-	isAlertOpen.value = true;
-};
 
 onMounted(() => {
 	watch(
@@ -35,6 +28,10 @@ onMounted(() => {
 		{ immediate: true }
 	);
 });
+
+const handleDelete = (postId: number): void => {
+	alert(`Do you want to delete the post ID#${postId}?`);
+};
 </script>
 
 <template>
@@ -74,7 +71,7 @@ onMounted(() => {
 									class="text-red-500 hover:text-red-600"
 									method="delete"
 									as="button">
-									Delete
+									Delete directly
 								</Link>
 							</TableCell>
 						</TableRow>
@@ -84,11 +81,10 @@ onMounted(() => {
 		</div>
 
 		<div>
-			<Button class="text-red-500 hover:text-red-600" @click="openAlert">Show Alert</Button>
-
 			<AlertConfirm
-				:open="isAlertOpen"
-				title="Do you want to delete the Post ID#12?"
+				:onDelete="handleDelete(15)"
+				textButton="Delete with confirmation"
+				question="Do you want to delete the Post ID#12?"
 				description="This action cannot be undone. This will permanently delete the post." />
 		</div>
 	</AppLayout>
