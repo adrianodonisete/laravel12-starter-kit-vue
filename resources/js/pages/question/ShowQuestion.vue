@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { type BreadcrumbItem } from '@/types';
 import AlertConfirm from '@/components/AlertConfirm.vue';
+import { ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
 	{
@@ -11,9 +12,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 	},
 ];
 
-const handleDelete = (postId: number) => {
-	alert(`Do you want to delete the post ID#${postId}?`);
-};
+const idPost = ref<number>(16);
 </script>
 
 <template>
@@ -24,9 +23,9 @@ const handleDelete = (postId: number) => {
 			<div class="min-w-md mx-auto p-6 mt-8 bg-white dark:bg-gray-800 shadow-lg rounded-xl">
 				<div class="grid gap-2">
 					<AlertConfirm
-						:onDelete="handleDelete(102)"
+						:route-confirm="route('posts.destroy', idPost)"
 						textButton="Delete with confirmation"
-						question="Do you want to delete the post ID#12?"
+						:question="`Do you want to delete the post ID#${idPost}?`"
 						description="This action cannot be undone. This will permanently delete the post." />
 				</div>
 			</div>

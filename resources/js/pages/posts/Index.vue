@@ -2,10 +2,10 @@
 import { onMounted, watch } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { toast } from 'vue-sonner';
-import AppLayout from '@/layouts/AppLayout.vue';
 import { Flash, Post, type BreadcrumbItem } from '@/types';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AlertConfirm from '@/components/AlertConfirm.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
 	{
@@ -28,10 +28,6 @@ onMounted(() => {
 		{ immediate: true }
 	);
 });
-
-const handleDelete = (postId: number): void => {
-	alert(`Do you want to delete the post ID#${postId}?`);
-};
 </script>
 
 <template>
@@ -40,7 +36,7 @@ const handleDelete = (postId: number): void => {
 	<AppLayout :breadcrumbs="breadcrumbs">
 		<div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
 			<div class="flex justify-end">
-				<Link href="/posts/create" class="text-indigo-500 hover:text-indigo-600">Create Post</Link>
+				<Link :href="route('posts.create')" class="text-indigo-500 hover:text-indigo-600">Create Post</Link>
 			</div>
 
 			<div
@@ -66,13 +62,14 @@ const handleDelete = (postId: number): void => {
 							</TableCell>
 							<TableCell class="flex justify-end gap-2">
 								<Link :href="route('posts.edit', post.id)" class="text-indigo-500 hover:text-indigo-600">Edit</Link>
-								<Link
-									:href="route('posts.destroy', post.id)"
-									class="text-red-500 hover:text-red-600"
-									method="delete"
-									as="button">
-									Delete directly
-								</Link>
+
+								<AlertConfirm
+									:route-confirm="route('posts.destroy', post.id)"
+									text-button="Delete"
+									text-button-confirm="Yes, delete post"
+									text-button-cancel="No, please"
+									:question="`Do you want to delete the post ID#${post.id}?`"
+									description="This action cannot be undone. This will permanently delete the post." />
 							</TableCell>
 						</TableRow>
 					</TableBody>
@@ -80,13 +77,7 @@ const handleDelete = (postId: number): void => {
 			</div>
 		</div>
 
-		<div>
-			<AlertConfirm
-				:onDelete="handleDelete(15)"
-				textButton="Delete with confirmation"
-				question="Do you want to delete the Post ID#12?"
-				description="This action cannot be undone. This will permanently delete the post." />
-		</div>
+		<div></div>
 	</AppLayout>
 
 	<!-- https://www.shadcn-vue.com/docs/components/alert-dialog.html -->

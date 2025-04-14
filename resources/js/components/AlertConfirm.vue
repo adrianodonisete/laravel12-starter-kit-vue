@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import {
 	AlertDialogAction,
 	AlertDialogCancel,
@@ -10,17 +11,20 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from 'radix-vue';
-// import { Link } from '@inertiajs/vue3';
 
 interface Props {
+	routeConfirm: string;
 	textButton: string;
 	question: string;
-	description: string;
-	onDelete: (postId: number) => void;
+	description?: string;
+	textButtonConfirm?: string;
+	textButtonCancel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
 	description: 'This action cannot be undone.',
+	textButtonConfirm: 'Yes, confirm',
+	textButtonCancel: 'Cancel',
 });
 </script>
 
@@ -35,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
 				<AlertDialogTitle class="text-mauve12 m-0 text-[17px] font-semibold">
 					{{ props.question }}
 				</AlertDialogTitle>
+
 				<AlertDialogDescription class="text-mauve11 mt-4 mb-5 text-[15px] leading-normal">
 					{{ props.description }}
 				</AlertDialogDescription>
@@ -42,12 +47,14 @@ const props = withDefaults(defineProps<Props>(), {
 				<div class="flex justify-end gap-[25px]">
 					<AlertDialogCancel
 						class="text-mauve11 bg-mauve4 hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none outline-none focus:shadow-[0_0_0_2px]">
-						Cancel
+						{{ props.textButtonCancel }}
 					</AlertDialogCancel>
+
 					<AlertDialogAction
-						class="text-red11 bg-red4 hover:bg-red5 focus:shadow-red7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none outline-none focus:shadow-[0_0_0_2px]"
-						@click="onDelete">
-						Yes, confirm
+						class="text-red11 bg-red4 hover:bg-red5 focus:shadow-red7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none outline-none focus:shadow-[0_0_0_2px]">
+						<Link :href="props.routeConfirm" class="text-red-500 hover:text-red-600" method="delete" as="button">
+							{{ props.textButtonConfirm }}
+						</Link>
 					</AlertDialogAction>
 				</div>
 			</AlertDialogContent>

@@ -27,6 +27,11 @@ const mainNavItems: NavItem[] = [
 		href: '/posts',
 		icon: LayoutGrid,
 	},
+	{
+		title: 'Questions',
+		href: '/questions/show',
+		icon: LayoutGrid,
+	},
 ];
 
 const footerNavItems: NavItem[] = [
